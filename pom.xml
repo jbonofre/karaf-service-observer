@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>net.nanthrax</groupId>
+    <artifactId>karaf-service-observer</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>bundle</packaging>
+
+    <name>Karaf Service Observer</name>
+    <description>A Karaf bundle that observes DataSource services and refresh the bundles using these services</description>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.karaf</groupId>
+                <artifactId>karaf-bom</artifactId>
+                <version>4.4.10</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>osgi.core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>6.0.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-Activator>net.nanthrax.karaf.service.observer.Activator</Bundle-Activator>
+                        <Export-Package>net.nanthrax.karaf.service.observer</Export-Package>
+                        <Import-Package>*</Import-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    
+</project>
