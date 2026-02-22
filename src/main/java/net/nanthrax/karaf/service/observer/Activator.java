@@ -5,8 +5,10 @@ import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -28,7 +30,21 @@ public class Activator implements BundleActivator {
             }
             @Override
             public void modifiedService(ServiceReference<DataSource> reference, DataSource service) {
+                logger.info("Datasource {} modified", reference.toString());
 
+                if (reference.getUsingBundles() != null && reference.getUsingBundles().length > 0) {
+                    for (Bundle bundle : reference.getUsingBundles()) {
+                        logger.info("\tBundle {} ({}) is using the datasource", bundle.getSymbolicName(), bundle.getBundleId());
+                        logger.info("\t\trefreshing bundle ...");
+                        try {
+                            bundle.update();
+                            logger.info("\t\tbundle refreshed");
+                        } catch (BundleException e) {
+                            logger.error("Error refreshing bundle {} ({}): ", bundle.getSymbolicName(), bundle.getBundleId(), e);
+                        }
+                    }
+                }
+                
                 // TODO Auto-generated method stub
                 throw new UnsupportedOperationException("Unimplemented method 'modifiedService'");
             }
